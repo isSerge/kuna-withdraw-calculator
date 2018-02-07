@@ -100,6 +100,16 @@ class App extends Component {
             priceBtc: 0,
             priceUsd: 0
           },
+        },
+        {
+          name: 'xrp',
+          cmc: 'ripple',
+          rate: 0,
+          withdraw: 0.02,
+          marketPrice: {
+            priceBtc: 0,
+            priceUsd: 0
+          },
         }
       ]
     };
