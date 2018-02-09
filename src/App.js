@@ -1,46 +1,20 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import TextField from 'material-ui/TextField';
+import React, { Component } from 'react'
+import axios from 'axios'
+import TextField from 'material-ui/TextField'
 import {
   Table,
   TableBody,
   TableHeader,
   TableHeaderColumn,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
-import LinearProgress from 'material-ui/LinearProgress';
-import './App.css';
-
-const Item = ({
-  currencyName,
-  rate,
-  uah,
-  withdrawFee,
-  marketPrice,
-  isBestOption
-}) => {
-  const amount = (uah / rate).toFixed(5)
-  const afterWithdraw = (amount - withdrawFee).toFixed(5)
-  const btcPrice = (marketPrice.priceBtc * afterWithdraw).toFixed(5)
-  const usdPrice = (marketPrice.priceUsd * afterWithdraw).toFixed(2)
-
-  return (
-    <TableRow style={{ backgroundColor: rate !== 0 && isBestOption ? 'coral' : 'inherit' }}>
-      <TableRowColumn>{currencyName}</TableRowColumn>
-      <TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : rate}</TableRowColumn>
-      <TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : amount}</TableRowColumn>
-      <TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : withdrawFee}</TableRowColumn>
-      <TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : afterWithdraw}</TableRowColumn>
-      <TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : btcPrice}</TableRowColumn>
-      <TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : usdPrice}</TableRowColumn>
-    </TableRow>
-  )
-}
+} from 'material-ui/Table'
+import './App.css'
+import Item from './Item'
+import currencies from './currencies'
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.handleValueChange = this.handleValueChange.bind(this)
     this.getKuna = this.getKuna.bind(this)
@@ -50,69 +24,8 @@ class App extends Component {
 
     this.state = {
       uah: 1000,
-      currencies: [
-        {
-          name: 'eth',
-          cmc: 'ethereum',
-          rate: 0,
-          withdraw: 0.005,
-          marketPrice: {
-            priceBtc: 0,
-            priceUsd: 0
-          },
-        },
-        {
-          name: 'btc',
-          cmc: 'bitcoin',
-          rate: 0,
-          withdraw: 0.001,
-          marketPrice: {
-            priceBtc: 0,
-            priceUsd: 0
-          },
-        },
-        {
-          name: 'waves',
-          cmc: 'waves',
-          rate: 0,
-          withdraw: 0.01,
-          marketPrice: {
-            priceBtc: 0,
-            priceUsd: 0
-          },
-        },
-        {
-          name: 'bch',
-          cmc: 'bitcoin-cash',
-          rate: 0,
-          withdraw: 0.001,
-          marketPrice: {
-            priceBtc: 0,
-            priceUsd: 0
-          },
-        },
-        {
-          name: 'gbg',
-          cmc: 'golos-gold',
-          rate: 0,
-          withdraw: 0,
-          marketPrice: {
-            priceBtc: 0,
-            priceUsd: 0
-          },
-        },
-        {
-          name: 'xrp',
-          cmc: 'ripple',
-          rate: 0,
-          withdraw: 0.02,
-          marketPrice: {
-            priceBtc: 0,
-            priceUsd: 0
-          },
-        }
-      ]
-    };
+      currencies,
+    }
   }
 
   componentDidMount() {
@@ -203,8 +116,8 @@ class App extends Component {
           floatingLabelFixed
         />
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
