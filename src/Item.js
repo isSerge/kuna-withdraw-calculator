@@ -21,7 +21,7 @@ const Item = ({
 	const usdPrice = (marketPrice.priceUsd * afterWithdraw).toFixed(2)
 
 	return (
-		<TableRow style={getRowStyle(rate, isBestOption)}>
+		<TableRow style={getRowStyle(isBestOption)}>
 			<TableRowColumn>{currencyName}</TableRowColumn>
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : rate}</TableRowColumn>
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : amount}</TableRowColumn>

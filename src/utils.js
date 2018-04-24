@@ -1,7 +1,7 @@
 import { prop } from 'ramda'
 
-export const getRowStyle = (rate, isBestOption) => 
-	({ backgroundColor: rate !== 0 && isBestOption ? 'coral' : 'inherit' })
+export const getRowStyle = isBestOption => 
+	({ backgroundColor: isBestOption ? 'coral' : 'inherit' })
 
 export const isBestOption = (x, state) =>
 	prop('name', x) === getBestOption(state)
