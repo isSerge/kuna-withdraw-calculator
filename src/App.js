@@ -66,11 +66,11 @@ class App extends Component {
             adjustForCheckbox={false}
           >
             <TableRow>
-              <TableHeaderColumn>currency</TableHeaderColumn>
+              <TableHeaderColumn>Currency</TableHeaderColumn>
               <TableHeaderColumn>KUNA rate</TableHeaderColumn>
-              <TableHeaderColumn>amount</TableHeaderColumn>
-              <TableHeaderColumn>withdraw fee</TableHeaderColumn>
-              <TableHeaderColumn style={{ whiteSpace: 'wrap'}}>amount after withdraw</TableHeaderColumn>
+              <TableHeaderColumn>Amount</TableHeaderColumn>
+              <TableHeaderColumn>Withdraw fee</TableHeaderColumn>
+              <TableHeaderColumn style={{ whiteSpace: 'wrap'}}>Amount after withdraw</TableHeaderColumn>
               <TableHeaderColumn>BTC price</TableHeaderColumn>
               <TableHeaderColumn>USD price</TableHeaderColumn>
             </TableRow>
