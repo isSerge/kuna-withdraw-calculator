@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {
 	TableRow,
 	TableRowColumn,
-  } from 'material-ui/Table'
+} from 'material-ui/Table'
 import LinearProgress from 'material-ui/LinearProgress'
 import { getRowStyle } from './utils'
 
@@ -19,9 +19,9 @@ const Item = ({
 	const afterWithdraw = (amount - withdrawFee).toFixed(5)
 	const btcPrice = (marketPrice.priceBtc * afterWithdraw).toFixed(5)
 	const usdPrice = (marketPrice.priceUsd * afterWithdraw).toFixed(2)
-  
+
 	return (
-	  <TableRow style={getRowStyle(rate, isBestOption)}>
+		<TableRow style={getRowStyle(rate, isBestOption)}>
 			<TableRowColumn>{currencyName}</TableRowColumn>
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : rate}</TableRowColumn>
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : amount}</TableRowColumn>
@@ -29,7 +29,7 @@ const Item = ({
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : afterWithdraw}</TableRowColumn>
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : btcPrice}</TableRowColumn>
 			<TableRowColumn>{rate === 0 ? <LinearProgress mode="indeterminate" /> : usdPrice}</TableRowColumn>
-	  </TableRow>
+		</TableRow>
 	)
 }
 

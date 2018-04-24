@@ -8,47 +8,29 @@ import {
   TableHeaderColumn,
   TableRow,
 } from 'material-ui/Table'
+import uuid from 'uuid'
 import './App.css'
 import Item from './Item'
 import currencies from './currencies'
+import { isBestOption } from './utils'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-
-    this.handleValueChange = this.handleValueChange.bind(this)
-    this.getKuna = this.getKuna.bind(this)
-    this.getMarket = this.getMarket.bind(this)
-    this.getBestOption = this.getBestOption.bind(this)
-    this.isBestOption = this.isBestOption.bind(this)
-
-    this.state = {
-      uah: 1000,
-      currencies,
-    }
+  state = {
+    uah: 1000,
+    currencies,
   }
 
   componentDidMount() {
+    this.getKuna()
+    this.getMarket()
+    
     setInterval(() => {
       this.getKuna()
       this.getMarket()
     }, 5000)
   }
 
-  getBestOption () {
-    const arr = this.state.currencies.map(x => ({
-      name: x.name,
-      final: (x.marketPrice.priceBtc * ((this.state.uah / x.rate) - x.withdraw))
-    }))
-
-    return arr.sort((a, b) => a.final < b.final)[0].name
-  }
-
-  isBestOption (x) {
-    return x.name === this.getBestOption()
-  }
-
-  getMarket() {
+  getMarket = () => {
     const url = 'https://api.coinmarketcap.com/v1/ticker'
     const requests = this.state.currencies.map(x =>
       axios.get(`${url}/${x.cmc}/`).then(r => ({
@@ -60,16 +42,16 @@ class App extends Component {
       .then(values => this.setState(this.state.currencies.map((x, i) => x.marketPrice = values[i])))
   }
 
-  getKuna() {
+  getKuna = () => {
     const url = 'https://kuna.io/api/v2/tickers'
     const requests = this.state.currencies.map(x =>
-      axios.get(`${url}/${x.name}uah/`).then(r => r.data.ticker.sell))
+      axios.get(`${url}/${x.kunaName}uah/`).then(r => r.data.ticker.sell))
 
     Promise.all(requests)
       .then(values => this.setState(this.state.currencies.map((x, i) => x.rate = values[i])))
   }
 
-  handleValueChange (e) {
+  handleValueChange = (e) => {
     this.setState({
       uah: e.target.value
     })
@@ -97,13 +79,13 @@ class App extends Component {
           {
             this.state.currencies.map(x => (
               <Item
-                key={x.name}
+                key={uuid.v4()}
                 currencyName={x.name}
                 uah={this.state.uah}
                 rate={x.rate}
                 withdrawFee={x.withdraw}
                 marketPrice={x.marketPrice}
-                isBestOption={this.isBestOption(x)}
+                isBestOption={isBestOption(x, this.state)}
               />
             ))
           }
