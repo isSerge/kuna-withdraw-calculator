@@ -1,92 +1,50 @@
-const currencies = [
-	{
-		name: 'Ethereum',
-		kunaName: 'eth',
-		cmc: 'ethereum',
-		rate: 0,
-		withdraw: 0.005,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Bitcoin',
-		kunaName: 'btc',
-		cmc: 'bitcoin',
-		rate: 0,
-		withdraw: 0.001,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Waves',
-		kunaName: 'waves',
-		cmc: 'waves',
-		rate: 0,
-		withdraw: 0.01,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Bitcoin Cash',
-		kunaName: 'bch',
-		cmc: 'bitcoin-cash',
-		rate: 0,
-		withdraw: 0.001,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Golos Gold',
-		kunaName: 'gbg',
-		cmc: 'golos-gold',
-		rate: 0,
-		withdraw: 0,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Ripple',
-		kunaName: 'xrp',
-		cmc: 'ripple',
-		rate: 0,
-		withdraw: 0.02,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Litecoin',
-		kunaName: 'ltc',
-		cmc: 'litecoin',
-		rate: 0,
-		withdraw: 0.001,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-	{
-		name: 'Stellar',
-		kunaName: 'xlm',
-		cmc: 'stellar',
-		rate: 0,
-		withdraw: 0.001,
-		marketPrice: {
-			priceBtc: 0,
-			priceUsd: 0,
-		},
-	},
-]
+import React from 'react'
+import PropTypes from 'prop-types'
+import uuid from 'uuid'
+import {
+	Table,
+	TableBody,
+	TableHeader,
+	TableHeaderColumn,
+	TableRow,
+} from 'material-ui/Table'
+import { isBestOption } from './utils'
+import Item from './Item'
 
-export default currencies
+const Currencies = ({ currencies, uah }) => (
+	<Table>
+		<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+			<TableRow>
+				<TableHeaderColumn>Currency</TableHeaderColumn>
+				<TableHeaderColumn>KUNA rate</TableHeaderColumn>
+				<TableHeaderColumn>Amount</TableHeaderColumn>
+				<TableHeaderColumn>Withdraw fee</TableHeaderColumn>
+				<TableHeaderColumn style={{ whiteSpace: 'wrap' }}>
+					Amount after withdraw
+				</TableHeaderColumn>
+				<TableHeaderColumn>BTC price</TableHeaderColumn>
+				<TableHeaderColumn>USD price</TableHeaderColumn>
+			</TableRow>
+		</TableHeader>
+		<TableBody>
+			{currencies.map(x => (
+				<Item
+					key={uuid.v4()}
+					currencyName={x.name}
+					uah={uah}
+					rate={x.rate}
+					withdrawFee={x.withdraw}
+					marketPrice={x.marketPrice}
+					isBestOption={isBestOption(x, null)}
+				/>
+			))}
+		</TableBody>
+	</Table>
+)
+
+Currencies.propTypes = {
+	currencies: PropTypes.array.isRequired,
+	uah: PropTypes.number.isRequired,
+}
+
+export default Currencies

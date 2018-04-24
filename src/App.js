@@ -1,105 +1,56 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { lifecycle } from 'recompose'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import TextField from 'material-ui/TextField'
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-} from 'material-ui/Table'
-import uuid from 'uuid'
 import './App.css'
-import Item from './Item'
-import currencies from './currencies'
-import { isBestOption } from './utils'
+import Currencies from './Currencies'
+import { fetchKuna, fetchMarket, updateUah } from './actions'
 
-class App extends Component {
-  state = {
-    uah: 1000,
-    currencies,
-  }
+const App = ({ currencies, uah, updateUah }) => (
+	<div className="App">
+		<Currencies currencies={currencies} uah={uah} />
+		<TextField
+			value={uah}
+			onChange={e => updateUah(e.target.value)}
+			floatingLabelText="Enter amount of UAH"
+			floatingLabelFixed
+		/>
+	</div>
+)
 
-  componentDidMount() {
-    this.getKuna()
-    this.getMarket()
-    
-    setInterval(() => {
-      this.getKuna()
-      this.getMarket()
-    }, 5000)
-  }
+export const AppWithData = lifecycle({
+	async componentDidMount() {
+		const { fetchKuna, fetchMarket } = this.props
 
-  getMarket = () => {
-    const url = 'https://api.coinmarketcap.com/v1/ticker'
-    const requests = this.state.currencies.map(x =>
-      axios.get(`${url}/${x.cmc}/`).then(r => ({
-        priceBtc: r.data[0].price_btc,
-        priceUsd: r.data[0].price_usd,
-      })))
+		await fetchKuna()
+		await fetchMarket()
 
-    Promise.all(requests)
-      .then(values => this.setState(this.state.currencies.map((x, i) => x.marketPrice = values[i])))
-  }
+		setInterval(async () => {
+			await fetchKuna()
+		  await fetchMarket()
+		}, 5000)
+	},
+})(App)
 
-  getKuna = () => {
-    const url = 'https://kuna.io/api/v2/tickers'
-    const requests = this.state.currencies.map(x =>
-      axios.get(`${url}/${x.kunaName}uah/`).then(r => r.data.ticker.sell))
+const mapStateToProps = state => ({
+  currencies: state.kuna.currencies,
+  uah: state.uah.value,
+})
 
-    Promise.all(requests)
-      .then(values => this.setState(this.state.currencies.map((x, i) => x.rate = values[i])))
-  }
+const mapDispatchToProps = dispatch => ({
+	fetchKuna: bindActionCreators(fetchKuna, dispatch),
+	fetchMarket: bindActionCreators(fetchMarket, dispatch),
+	updateUah: bindActionCreators(updateUah, dispatch),
+})
 
-  handleValueChange = (e) => {
-    this.setState({
-      uah: e.target.value
-    })
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <Table>
-          <TableHeader
-            displaySelectAll={false}
-            adjustForCheckbox={false}
-          >
-            <TableRow>
-              <TableHeaderColumn>Currency</TableHeaderColumn>
-              <TableHeaderColumn>KUNA rate</TableHeaderColumn>
-              <TableHeaderColumn>Amount</TableHeaderColumn>
-              <TableHeaderColumn>Withdraw fee</TableHeaderColumn>
-              <TableHeaderColumn style={{ whiteSpace: 'wrap'}}>Amount after withdraw</TableHeaderColumn>
-              <TableHeaderColumn>BTC price</TableHeaderColumn>
-              <TableHeaderColumn>USD price</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-          {
-            this.state.currencies.map(x => (
-              <Item
-                key={uuid.v4()}
-                currencyName={x.name}
-                uah={this.state.uah}
-                rate={x.rate}
-                withdrawFee={x.withdraw}
-                marketPrice={x.marketPrice}
-                isBestOption={isBestOption(x, this.state)}
-              />
-            ))
-          }
-          </TableBody>
-        </Table>
-        <TextField
-          value={this.state.uah}
-          onChange={this.handleValueChange}
-          floatingLabelText="Enter amount of UAH"
-          floatingLabelFixed
-        />
-      </div>
-    )
-  }
+App.propTypes = {
+	currencies: PropTypes.array.isRequired,
+	uah: PropTypes.number.isRequired,
+	fetchKuna: PropTypes.func.isRequired,
+	fetchMarket: PropTypes.func.isRequired,
+	updateUah: PropTypes.func.isRequired,
 }
 
-export default App
+export default connect(mapStateToProps, mapDispatchToProps)(AppWithData)
