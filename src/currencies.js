@@ -19,9 +19,7 @@ const Currencies = ({ currencies, uah }) => (
 				<TableHeaderColumn>KUNA rate</TableHeaderColumn>
 				<TableHeaderColumn>Amount</TableHeaderColumn>
 				<TableHeaderColumn>Withdraw fee</TableHeaderColumn>
-				<TableHeaderColumn style={{ whiteSpace: 'wrap' }}>
-					Amount after withdraw
-				</TableHeaderColumn>
+				<TableHeaderColumn>Amount after withdraw</TableHeaderColumn>
 				<TableHeaderColumn>BTC price</TableHeaderColumn>
 				<TableHeaderColumn>USD price</TableHeaderColumn>
 			</TableRow>

@@ -29,14 +29,14 @@ export const AppWithData = lifecycle({
 
 		setInterval(async () => {
 			await fetchKuna()
-		  await fetchMarket()
+			await fetchMarket()
 		}, 5000)
 	},
 })(App)
 
 const mapStateToProps = state => ({
-  currencies: state.kuna.currencies,
-  uah: state.uah.value,
+	currencies: state.kuna.currencies,
+	uah: state.uah.value,
 })
 
 const mapDispatchToProps = dispatch => ({
