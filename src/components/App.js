@@ -6,17 +6,17 @@ import { bindActionCreators } from 'redux'
 import TextField from 'material-ui/TextField'
 import './App.css'
 import Currencies from './Currencies'
-import { fetchKuna, fetchMarket, updateUah } from './actions'
+import { fetchKuna, fetchMarket, updateUah } from '../actions'
 
 const App = ({ currencies, uah, updateUah }) => (
 	<div className="App">
-		<Currencies currencies={currencies} uah={uah} />
 		<TextField
 			value={uah}
 			onChange={e => updateUah(e.target.value)}
 			floatingLabelText="Enter amount of UAH"
 			floatingLabelFixed
 		/>
+		<Currencies currencies={currencies} uah={uah} />
 	</div>
 )
 
@@ -35,7 +35,7 @@ export const AppWithData = lifecycle({
 })(App)
 
 const mapStateToProps = state => ({
-	currencies: state.kuna.currencies,
+	currencies: state.currencies,
 	uah: state.uah.value,
 })
 
@@ -46,8 +46,8 @@ const mapDispatchToProps = dispatch => ({
 })
 
 App.propTypes = {
-	currencies: PropTypes.array.isRequired,
-	uah: PropTypes.number.isRequired,
+	currencies: PropTypes.object.isRequired,
+	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 	fetchKuna: PropTypes.func.isRequired,
 	fetchMarket: PropTypes.func.isRequired,
 	updateUah: PropTypes.func.isRequired,

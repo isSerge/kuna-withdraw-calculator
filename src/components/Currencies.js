@@ -8,8 +8,8 @@ import {
 	TableHeaderColumn,
 	TableRow,
 } from 'material-ui/Table'
-import { isBestOption } from './utils'
 import Item from './Item'
+import { isBestOption } from '../utils'
 
 const Currencies = ({ currencies, uah }) => (
 	<Table>
@@ -25,7 +25,7 @@ const Currencies = ({ currencies, uah }) => (
 			</TableRow>
 		</TableHeader>
 		<TableBody>
-			{currencies.map(x => (
+			{currencies.items.map(x => (
 				<Item
 					key={uuid.v4()}
 					currencyName={x.name}
@@ -34,6 +34,7 @@ const Currencies = ({ currencies, uah }) => (
 					withdrawFee={x.withdraw}
 					marketPrice={x.marketPrice}
 					isBestOption={isBestOption(x, null)}
+					isFetching={currencies.isFetching}
 				/>
 			))}
 		</TableBody>
@@ -41,8 +42,8 @@ const Currencies = ({ currencies, uah }) => (
 )
 
 Currencies.propTypes = {
-	currencies: PropTypes.array.isRequired,
-	uah: PropTypes.number.isRequired,
+	currencies: PropTypes.object.isRequired,
+	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 
 export default Currencies
