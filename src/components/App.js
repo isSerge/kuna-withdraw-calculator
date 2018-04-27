@@ -22,14 +22,14 @@ const App = ({ currencies, uah, updateUah }) => (
 
 export const AppWithData = lifecycle({
 	async componentDidMount() {
-		const { fetchKuna, fetchMarket } = this.props
+		const { fetchKuna, fetchMarket, currencies } = this.props
 
-		await fetchKuna()
-		await fetchMarket()
+		await fetchKuna(currencies.items)
+		await fetchMarket(currencies.items)
 
 		setInterval(async () => {
-			await fetchKuna()
-			await fetchMarket()
+			await fetchKuna(currencies.items)
+			await fetchMarket(currencies.items)
 		}, 5000)
 	},
 })(App)

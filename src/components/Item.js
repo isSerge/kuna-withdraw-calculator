@@ -24,12 +24,12 @@ const Item = ({
 	return (
 		<TableRow style={getRowStyle(isBestOption)}>
 			<TableRowColumn>{currencyName}</TableRowColumn>
-			<TableRowColumn>{isFetching ? <LinearProgress mode="indeterminate" /> : rate}</TableRowColumn>
-			<TableRowColumn>{isFetching ? <LinearProgress mode="indeterminate" /> : amount}</TableRowColumn>
-			<TableRowColumn>{isFetching ? <LinearProgress mode="indeterminate" /> : withdrawFee}</TableRowColumn>
-			<TableRowColumn>{isFetching ? <LinearProgress mode="indeterminate" /> : afterWithdraw}</TableRowColumn>
-			<TableRowColumn>{isFetching ? <LinearProgress mode="indeterminate" /> : btcPrice}</TableRowColumn>
-			<TableRowColumn>{isFetching ? <LinearProgress mode="indeterminate" /> : usdPrice}</TableRowColumn>
+			<TableRowColumn>{rate}</TableRowColumn>
+			<TableRowColumn>{amount}</TableRowColumn>
+			<TableRowColumn>{withdrawFee}</TableRowColumn>
+			<TableRowColumn>{afterWithdraw}</TableRowColumn>
+			<TableRowColumn>{btcPrice}</TableRowColumn>
+			<TableRowColumn>{usdPrice}</TableRowColumn>
 		</TableRow>
 	)
 }

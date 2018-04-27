@@ -108,7 +108,14 @@ export default function currencies(state = initialState, action) {
 			return { ...state, isFetching: true }
 		}
 		case FETCH_KUNA_UPDATE: {
-			return { ...state, currencies: action.currencies, isFetching: false }
+			return {
+				...state,
+				items: state.items.map((x, i) => {
+					x.rate = action.rates[i]
+					return x
+				}),
+				isFetching: false,
+			}
 		}
 		case FETCH_KUNA_FAILURE: {
 			return { ...state, error: action.error, isFetching: false }
@@ -117,7 +124,14 @@ export default function currencies(state = initialState, action) {
 			return { ...state, isFetching: true }
 		}
 		case FETCH_MARKET_UPDATE: {
-			return { ...state, currencies: action.currencies, isFetching: false }
+			return {
+				...state,
+				currencies: state.items.map((x, i) => {
+					x.marketPrice = action.prices[i]
+					return x
+				}),
+				isFetching: false
+			}
 		}
 		case FETCH_MARKET_FAILURE: {
 			return { ...state, error: action.error, isFetching: false }
