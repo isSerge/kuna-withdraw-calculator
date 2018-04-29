@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import TextField from 'material-ui/TextField'
 import './App.css'
 import Currencies from './Currencies'
-import { fetchKuna, fetchMarket, updateUah } from '../actions'
+import { fethCurrencies, updateUah } from '../actions'
 
 const App = ({ currencies, uah, updateUah }) => (
 	<div className="App">
@@ -22,15 +22,11 @@ const App = ({ currencies, uah, updateUah }) => (
 
 export const AppWithData = lifecycle({
 	async componentDidMount() {
-		const { fetchKuna, fetchMarket, currencies } = this.props
+		const { fethCurrencies, currencies } = this.props
 
-		await fetchKuna(currencies.items)
-		await fetchMarket(currencies.items)
+		await fethCurrencies(currencies.items)
 
-		setInterval(async () => {
-			await fetchKuna(currencies.items)
-			await fetchMarket(currencies.items)
-		}, 5000)
+		setInterval(async () => await fethCurrencies(currencies.items), 5000)
 	},
 })(App)
 
@@ -40,16 +36,14 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-	fetchKuna: bindActionCreators(fetchKuna, dispatch),
-	fetchMarket: bindActionCreators(fetchMarket, dispatch),
+	fethCurrencies: bindActionCreators(fethCurrencies, dispatch),
 	updateUah: bindActionCreators(updateUah, dispatch),
 })
 
 App.propTypes = {
 	currencies: PropTypes.object.isRequired,
 	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-	fetchKuna: PropTypes.func.isRequired,
-	fetchMarket: PropTypes.func.isRequired,
+	fethCurrencies: PropTypes.func.isRequired,
 	updateUah: PropTypes.func.isRequired,
 }
 

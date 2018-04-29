@@ -1,14 +1,20 @@
 import axios from 'axios'
 import {
-	FETCH_KUNA_REQUEST,
+	FETCH_CURRENCIES_REQUEST,
+	FETCH_CURRENCIES_SUCCESS,
+	FETCH_KUNA_FAILURE,
+	FETCH_MARKET_FAILURE,
 	FETCH_KUNA_UPDATE,
-	FETCH_MARKET_REQUEST,
 	FETCH_MARKET_UPDATE,
 	CHANGE_UAH_VALUE,
 } from './constants'
 
-const requestKuna = () => ({
-	type: FETCH_KUNA_REQUEST,
+const requestCurrencies = () => ({
+	type: FETCH_CURRENCIES_REQUEST,
+})
+
+const updateCurrencies = () => ({
+	type: FETCH_CURRENCIES_SUCCESS,
 })
 
 const updateKuna = rates => ({
@@ -16,41 +22,49 @@ const updateKuna = rates => ({
 	rates
 })
 
-const requestMarket = () => ({
-	type: FETCH_MARKET_REQUEST,
-})
-
 const updateMarket = prices => ({
 	type: FETCH_MARKET_UPDATE,
 	prices,
 })
 
-export const fetchKuna = currencies => dispatch => {
-	dispatch(requestKuna())
+const fetchKunaFailure = error => ({
+	type: FETCH_KUNA_FAILURE,
+	error,
+})
 
-	const url = 'https://kuna.io/api/v2/tickers'
-	const requests = currencies.map(x =>
+const fetchMarketFailure = error => ({
+	type: FETCH_MARKET_FAILURE,
+	error,
+})
+
+export const fethCurrencies = currencies => async(dispatch) => {
+	dispatch(requestCurrencies())
+
+	const kunaUrl = 'https://kuna.io/api/v2/tickers'
+	const marketUrl = 'https://api.coinmarketcap.com/v1/ticker'
+
+	const kuna = await Promise.all(currencies.map(x =>
 		axios
-			.get(`${url}/${x.kunaName}uah/`)
-			.then(r => r.data.ticker.last),
-	)
+			.get(`${kunaUrl}/${x.kunaName}uah/`)
+			.then(r => r.data.ticker.last)
+			.catch(e => dispatch(fetchKunaFailure(e)))
+		))
 
-	return Promise.all(requests)
-		.then(values => dispatch(updateKuna(values)))
-}
+	dispatch(updateKuna(kuna))
 
-export const fetchMarket = currencies => dispatch => {
-	dispatch(requestMarket())
-	const url = 'https://api.coinmarketcap.com/v1/ticker'
-	const requests = currencies.map(x =>
-		axios.get(`${url}/${x.cmc}/`).then(r => ({
-			priceBtc: r.data[0].price_btc,
-			priceUsd: r.data[0].price_usd,
-		})),
-	)
+	const market = await Promise.all(currencies.map(x =>
+		axios
+			.get(`${marketUrl}/${x.cmc}/`)
+			.then(r => ({
+				priceBtc: r.data[0].price_btc,
+				priceUsd: r.data[0].price_usd,
+			}))
+			.catch(e => dispatch(fetchMarketFailure(e)))
+		))
+	
+	dispatch(updateMarket(market))
 
-	return Promise.all(requests)
-		.then(values => dispatch(updateMarket(values)))
+	return dispatch(updateCurrencies())
 }
 
 export const updateUah = value => ({

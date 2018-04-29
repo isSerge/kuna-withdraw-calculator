@@ -25,18 +25,25 @@ const Currencies = ({ currencies, uah }) => (
 			</TableRow>
 		</TableHeader>
 		<TableBody>
-			{currencies.items.map(x => (
-				<Item
-					key={uuid.v4()}
-					currencyName={x.name}
-					uah={uah}
-					rate={x.rate}
-					withdrawFee={x.withdraw}
-					marketPrice={x.marketPrice}
-					isBestOption={isBestOption(x, null)}
-					isFetching={currencies.isFetching}
-				/>
-			))}
+			{currencies.items.map(x => {
+				const amount = (uah / x.rate).toFixed(5)
+				const afterWithdrawAmount = (amount - x.withdraw).toFixed(5)
+				const btcPrice = (x.marketPrice.priceBtc * afterWithdrawAmount).toFixed(5)
+				const usdPrice = (x.marketPrice.priceUsd * afterWithdrawAmount).toFixed(2)
+				return (
+					<Item
+						key={uuid.v4()}
+						currencyName={x.name}
+						rate={x.rate}
+						amount={amount}
+						withdrawFee={x.withdraw}
+						afterWithdraw={afterWithdrawAmount}
+						btcPrice={btcPrice}
+						usdPrice={usdPrice}
+						isBestOption={isBestOption(x, null)}
+					/>
+				)
+			})}
 		</TableBody>
 	</Table>
 )
