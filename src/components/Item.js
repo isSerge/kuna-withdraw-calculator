@@ -33,12 +33,10 @@ Item.propTypes = {
 	rate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	withdrawFee: PropTypes.number,
-	marketPrice: PropTypes.shape({
-		priceBtc: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-		priceUsd: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	}),
+	afterWithdraw: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	priceBtc: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	priceUsd: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	isBestOption: PropTypes.bool,
-	isFetching: PropTypes.bool,
 }
 
 export default Item
