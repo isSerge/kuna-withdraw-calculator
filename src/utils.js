@@ -14,3 +14,5 @@ const getBestOption = state => {
 
     // return arr.sort((a, b) => a.final < b.final)[0].name
 }
+
+export const calculateProfit = (price, amount) => price * amount
