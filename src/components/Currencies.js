@@ -11,39 +11,36 @@ import {
 import Item from './Item'
 import { isBestOption } from '../utils'
 
+const headerColumnStyle = {
+	whiteSpace: 'pre-wrap',
+}
+
 const Currencies = ({ currencies, uah }) => (
 	<Table>
 		<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 			<TableRow>
-				<TableHeaderColumn>Currency</TableHeaderColumn>
-				<TableHeaderColumn>KUNA rate</TableHeaderColumn>
-				<TableHeaderColumn>Amount</TableHeaderColumn>
-				<TableHeaderColumn>Withdraw fee</TableHeaderColumn>
-				<TableHeaderColumn>Amount after withdraw</TableHeaderColumn>
-				<TableHeaderColumn>BTC price</TableHeaderColumn>
-				<TableHeaderColumn>USD price</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>Currency</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>KUNA rate</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>Amount</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>Withdraw fee</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>Amount after withdraw</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>BTC amount</TableHeaderColumn>
+				<TableHeaderColumn style={headerColumnStyle}>USD amount</TableHeaderColumn>
 			</TableRow>
 		</TableHeader>
 		<TableBody>
-			{currencies.items.map(x => {
-				const amount = (uah / x.rate).toFixed(5)
-				const afterWithdrawAmount = (amount - x.withdraw).toFixed(5)
-				const btcPrice = (x.marketPrice.priceBtc * afterWithdrawAmount).toFixed(5)
-				const usdPrice = (x.marketPrice.priceUsd * afterWithdrawAmount).toFixed(2)
-				return (
-					<Item
-						key={uuid.v4()}
-						currencyName={x.name}
-						rate={x.rate}
-						amount={amount}
-						withdrawFee={x.withdraw}
-						afterWithdraw={afterWithdrawAmount}
-						btcPrice={btcPrice}
-						usdPrice={usdPrice}
-						isBestOption={isBestOption(x, null)}
-					/>
-				)
-			})}
+			{currencies.items.map(x => (
+				<Item
+					key={uuid.v4()}
+					currencyName={x.name}
+					rate={x.rate}
+					amount={uah / x.rate}
+					withdrawFee={x.withdrawFee}
+					priceBtc={x.marketPrice.priceBtc}
+					priceUsd={x.marketPrice.priceUsd}
+					isBestOption={isBestOption(x, null)}
+				/>
+			))}
 		</TableBody>
 	</Table>
 )
