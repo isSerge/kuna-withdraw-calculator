@@ -26,7 +26,7 @@ export const AppWithData = lifecycle({
 
 		await fethCurrencies(currencies.items)
 
-		setInterval(async () => await fethCurrencies(currencies.items), 5000)
+		setInterval(async () => await fethCurrencies(currencies.items), 15000)
 	},
 })(App)
 
