@@ -14,7 +14,7 @@ const initialState = {
 			kunaName: 'eth',
 			cmc: 'ethereum',
 			rate: 0,
-			withdraw: 0.005,
+			withdrawFee: 0.005,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -25,7 +25,7 @@ const initialState = {
 			kunaName: 'btc',
 			cmc: 'bitcoin',
 			rate: 0,
-			withdraw: 0.001,
+			withdrawFee: 0.001,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -36,7 +36,7 @@ const initialState = {
 			kunaName: 'waves',
 			cmc: 'waves',
 			rate: 0,
-			withdraw: 0.01,
+			withdrawFee: 0.01,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -47,7 +47,7 @@ const initialState = {
 			kunaName: 'bch',
 			cmc: 'bitcoin-cash',
 			rate: 0,
-			withdraw: 0.001,
+			withdrawFee: 0.001,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -58,7 +58,7 @@ const initialState = {
 			kunaName: 'gbg',
 			cmc: 'golos-gold',
 			rate: 0,
-			withdraw: 0,
+			withdrawFee: 0,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -69,7 +69,7 @@ const initialState = {
 			kunaName: 'xrp',
 			cmc: 'ripple',
 			rate: 0,
-			withdraw: 0.02,
+			withdrawFee: 0.02,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -80,7 +80,7 @@ const initialState = {
 			kunaName: 'ltc',
 			cmc: 'litecoin',
 			rate: 0,
-			withdraw: 0.001,
+			withdrawFee: 0.001,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -91,7 +91,7 @@ const initialState = {
 			kunaName: 'xlm',
 			cmc: 'stellar',
 			rate: 0,
-			withdraw: 0.001,
+			withdrawFee: 0.001,
 			marketPrice: {
 				priceBtc: 0,
 				priceUsd: 0,
@@ -113,10 +113,7 @@ export default function currencies(state = initialState, action) {
 		case FETCH_KUNA_UPDATE: {
 			return {
 				...state,
-				items: state.items.map((x, i) => {
-					x.rate = action.rates[i]
-					return x
-				})
+				items: state.items.map((x, i) => ({...x, rate: action.rates[i]}))
 			}
 		}
 		case FETCH_KUNA_FAILURE: {
@@ -126,10 +123,7 @@ export default function currencies(state = initialState, action) {
 		case FETCH_MARKET_UPDATE: {
 			return {
 				...state,
-				items: state.items.map((x, i) => {
-					x.marketPrice = action.prices[i]
-					return x
-				})
+				items: state.items.map((x, i) => ({...x, marketPrice: action.prices[i]}))
 			}
 		}
 		case FETCH_MARKET_FAILURE: {
