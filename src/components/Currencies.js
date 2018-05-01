@@ -38,7 +38,7 @@ const Currencies = ({ currencies, uah }) => (
 					withdrawFee={x.withdrawFee}
 					priceBtc={x.marketPrice.priceBtc}
 					priceUsd={x.marketPrice.priceUsd}
-					isBestOption={isBestOption(x, null)}
+					isBestOption={isBestOption(x, currencies, uah)}
 				/>
 			))}
 		</TableBody>

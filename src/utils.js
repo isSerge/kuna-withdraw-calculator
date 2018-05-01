@@ -3,16 +3,18 @@ import { prop } from 'ramda'
 export const getRowStyle = isBestOption => 
 	({ backgroundColor: isBestOption ? 'coral' : 'inherit' })
 
-export const isBestOption = (x, state) =>
-	prop('name', x) === getBestOption(state)
+export const isBestOption = (x, options, uah) =>
+	prop('name', x) === getBestOption(options, uah)
 
-const getBestOption = state => {
-    // const arr = state.currencies.map(x => ({
-	// 	name: prop('name', x),
-	// 	final: x.marketPrice.priceBtc * (state.uah / prop('rate', x) - prop('withdraw', x)),
-	// }))
+const getBestOption = (options, uah) => {
+    const arr = options.items.map(x => ({
+		name: prop('name', x),
+		final: x.marketPrice.priceBtc * (uah / prop('rate', x) - prop('withdrawFee', x)),
+	}))
 
-    // return arr.sort((a, b) => a.final < b.final)[0].name
+	console.log(arr)
+
+    return arr.sort((a, b) => a.final < b.final)[0].name
 }
 
 export const calculateProfit = (price, amount) => price * amount
