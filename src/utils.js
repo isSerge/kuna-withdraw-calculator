@@ -12,8 +12,6 @@ const getBestOption = (options, uah) => {
 		final: x.marketPrice.priceBtc * (uah / prop('rate', x) - prop('withdrawFee', x)),
 	}))
 
-	console.log(arr)
-
     return arr.sort((a, b) => a.final < b.final)[0].name
 }
 
