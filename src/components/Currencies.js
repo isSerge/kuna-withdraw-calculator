@@ -9,7 +9,7 @@ import {
 	TableRow,
 } from 'material-ui/Table'
 import Item from './Item'
-import { isBestOption } from '../utils'
+import { getBestOptionName } from '../utils'
 
 const headerColumnStyle = {
 	whiteSpace: 'pre-wrap',
@@ -38,7 +38,7 @@ const Currencies = ({ currencies, uah }) => (
 					withdrawFee={x.withdrawFee}
 					priceBtc={x.marketPrice.priceBtc}
 					priceUsd={x.marketPrice.priceUsd}
-					isBestOption={isBestOption(x, currencies, uah)}
+					isBestOption={x.name === getBestOptionName(currencies, uah)}
 				/>
 			))}
 		</TableBody>
