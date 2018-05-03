@@ -4,8 +4,7 @@ import {
 	TableRow,
 	TableRowColumn,
 } from 'material-ui/Table'
-import LinearProgress from 'material-ui/LinearProgress'
-import { getRowStyle, calculateProfit } from '../utils'
+import { getRowStyle } from '../utils'
 
 const Item = ({
 	currencyName,
@@ -25,8 +24,8 @@ const Item = ({
 			<TableRowColumn>{amount.toFixed(5)}</TableRowColumn>
 			<TableRowColumn>{withdrawFee}</TableRowColumn>
 			<TableRowColumn>{afterWithdrawAmount.toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{calculateProfit(priceBtc, afterWithdrawAmount).toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{calculateProfit(priceUsd, afterWithdrawAmount).toFixed(2)}</TableRowColumn>
+			<TableRowColumn>{(priceBtc * afterWithdrawAmount).toFixed(5)}</TableRowColumn>
+			<TableRowColumn>{(priceUsd * afterWithdrawAmount).toFixed(2)}</TableRowColumn>
 		</TableRow>
 	)
 }

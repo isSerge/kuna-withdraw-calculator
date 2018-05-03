@@ -1,15 +1,25 @@
-import { head, prop, path } from 'ramda'
+import { compose, head, map, prop, path, sort } from 'ramda'
 
 export const getRowStyle = isBestOption => 
 	({ backgroundColor: isBestOption ? 'coral' : 'inherit' })
 
 export const getBestOptionName = (currencies, uah) => {
-    const arr = currencies.items.map(x => ({
+	const calculateValue = x =>
+		path(['marketPrice', 'priceBtc'], x) * (uah / prop('rate', x) - prop('withdrawFee', x))
+
+	const transformation = x => ({
 		name: prop('name', x),
-		final: path(['marketPrice', 'priceBtc'], x) * (uah / prop('rate', x) - prop('withdrawFee', x)),
-	}))
+		value: calculateValue(x),
+	})
 
-    return prop('name', head(arr.sort((a, b) => prop('final', a) < prop('final', b))))
+	const diff = (a, b) =>
+		prop('value', a) < prop('value', b)
+
+    return compose(
+		prop('name'),
+		head,
+		sort(diff),
+		map(transformation),
+		prop('items')
+	)(currencies)
 }
-
-export const calculateProfit = (price, amount) => price * amount
