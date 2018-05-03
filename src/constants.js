@@ -5,3 +5,5 @@ export const FETCH_KUNA_FAILURE = 'FETCH_KUNA_FAILURE'
 export const FETCH_MARKET_UPDATE = 'FETCH_MARKET_UPDATE'
 export const FETCH_MARKET_FAILURE = 'FETCH_MARKET_FAILURE'
 export const CHANGE_UAH_VALUE = 'CHANGE_UAH_VALUE'
+
+export const columnNames = ['Currency', 'KUNA rate', 'Amount', 'Withdraw fee', 'Amount after withdraw', 'BTC amount', 'USD amount']
