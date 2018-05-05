@@ -1,25 +1,31 @@
-import { compose, head, map, prop, path, sort } from 'ramda'
+import * as R from 'ramda'
 
+// redux utils
+export const createReducer = (init, handlers) =>
+	(state = init, action) =>
+		R.propOr(R.identity, R.prop('type', action), handlers)(state, action)
+
+// style utils
 export const getRowStyle = isBestOption => 
 	({ backgroundColor: isBestOption ? 'coral' : 'inherit' })
 
-export const getBestOptionName = (currencies, uah) => {
+
+export const getBestOption = (currencies, uah) => {
 	const calculateValue = x =>
-		path(['marketPrice', 'priceBtc'], x) * (uah / prop('rate', x) - prop('withdrawFee', x))
+		R.path(['marketPrice', 'priceBtc'], x) * (uah / R.prop('rate', x) - R.prop('withdrawFee', x))
 
 	const transformation = x => ({
-		name: prop('name', x),
+		name: R.prop('name', x),
 		value: calculateValue(x),
 	})
 
 	const diff = (a, b) =>
-		prop('value', a) < prop('value', b)
+		R.prop('value', a) < R.prop('value', b)
 
-    return compose(
-		prop('name'),
-		head,
-		sort(diff),
-		map(transformation),
-		prop('items')
+    return R.compose(
+		R.prop('name'),
+		R.head,
+		R.sort(diff),
+		R.map(transformation)
 	)(currencies)
 }

@@ -10,7 +10,6 @@ import {
 	TableRow,
 } from 'material-ui/Table'
 import Item from './Item'
-import { getBestOptionName } from '../utils'
 import { columnNames } from '../constants'
 
 const Header = c => <TableHeader displaySelectAll={false} adjustForCheckbox={false}>{c}</TableHeader>
@@ -18,8 +17,8 @@ const Row = c => <TableRow>{c}</TableRow>
 const HeaderColumn = t => <TableHeaderColumn style={{ whiteSpace: 'pre-wrap' }} key={t}>{t}</TableHeaderColumn>
 const renderHeader = compose(Header, Row, map(HeaderColumn))
 
-const Currencies = ({ currencies, uah }) => {
-	const bestOptionName = getBestOptionName(currencies, uah)
+const Currencies = ({ currencies, uah, bestOption }) => {
+
 	const renderItem = x => (
 		<Item
 			key={uuid.v4()}
@@ -29,7 +28,7 @@ const Currencies = ({ currencies, uah }) => {
 			withdrawFee={x.withdrawFee}
 			priceBtc={x.marketPrice.priceBtc}
 			priceUsd={x.marketPrice.priceUsd}
-			isBestOption={x.name === bestOptionName}
+			isBestOption={x.name === bestOption}
 		/>
 	)
 	const Body = c => <TableBody>{c}</TableBody>
@@ -38,14 +37,15 @@ const Currencies = ({ currencies, uah }) => {
 	return (
 		<Table>
 			{renderHeader(columnNames)}
-			{renderBody(currencies.items)}
+			{renderBody(currencies)}
 		</Table>
 	)
 }
 
 Currencies.propTypes = {
-	currencies: PropTypes.object.isRequired,
+	currencies: PropTypes.array.isRequired,
 	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+	bestOption: PropTypes.string.isRequired,
 }
 
 export default Currencies

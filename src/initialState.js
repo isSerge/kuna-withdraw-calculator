@@ -1,14 +1,5 @@
-import {
-	FETCH_CURRENCIES_REQUEST,
-	FETCH_CURRENCIES_SUCCESS,
-	FETCH_KUNA_UPDATE,
-	FETCH_KUNA_FAILURE,
-	FETCH_MARKET_UPDATE,
-	FETCH_MARKET_FAILURE,
-} from '../constants'
-
-const initialState = {
-	items: [
+export default {
+	currencies: [
 		{
 			name: 'Ethereum',
 			kunaName: 'eth',
@@ -100,37 +91,5 @@ const initialState = {
 	],
 	isFetching: false,
 	error: '',
-}
-
-export default function currencies(state = initialState, action) {
-	switch (action.type) {
-		case FETCH_CURRENCIES_REQUEST: {
-			return { ...state, isFetching: true }
-		}
-		case FETCH_CURRENCIES_SUCCESS: {
-			return { ...state, isFetching: false }
-		}
-		case FETCH_KUNA_UPDATE: {
-			return {
-				...state,
-				items: state.items.map((x, i) => ({...x, rate: action.rates[i]}))
-			}
-		}
-		case FETCH_KUNA_FAILURE: {
-			// todo: make individual error and global isFetching
-			return { ...state, error: action.error, isFetching: false }
-		}
-		case FETCH_MARKET_UPDATE: {
-			return {
-				...state,
-				items: state.items.map((x, i) => ({...x, marketPrice: action.prices[i]}))
-			}
-		}
-		case FETCH_MARKET_FAILURE: {
-			// todo: make individual error and global isFetching
-			return { ...state, error: action.error, isFetching: false }
-		}
-		default:
-			return state
-	}
+	uah: 1000,
 }
