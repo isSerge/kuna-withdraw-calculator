@@ -88,6 +88,28 @@ export default {
 				priceUsd: 0,
 			},
 		},
+		{
+			name: 'Dash',
+			kunaName: 'dash',
+			cmc: 'dash',
+			rate: 0,
+			withdrawFee: 0.01,
+			marketPrice: {
+				priceBtc: 0,
+				priceUsd: 0,
+			},
+		},
+		{
+			name: 'Zcash',
+			kunaName: 'zec',
+			cmc: 'zcash',
+			rate: 0,
+			withdrawFee: 0.001,
+			marketPrice: {
+				priceBtc: 0,
+				priceUsd: 0,
+			},
+		},
 	],
 	isFetching: false,
 	error: '',
