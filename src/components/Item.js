@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import uuid from 'uuid'
 import {
 	TableRow,
 	TableRowColumn,
 } from 'material-ui/Table'
 import { getRowStyle } from '../utils'
+import { map, compose } from 'ramda'
 
 const Item = ({
 	name,
@@ -17,32 +19,33 @@ const Item = ({
 }) => {
 	const amount = uah / rate
 	const afterWithdrawAmount = amount - withdrawFee
+	const columns = [
+		name,
+		rate,
+		(amount).toFixed(5),
+		withdrawFee,
+		afterWithdrawAmount.toFixed(5),
+		(marketPrice.priceBtc * afterWithdrawAmount).toFixed(5),
+		(marketPrice.priceUsd * afterWithdrawAmount).toFixed(2),
+	]
 
-	return (
-		<TableRow style={getRowStyle(name === bestOption)}>
-			<TableRowColumn>{name}</TableRowColumn>
-			<TableRowColumn>{rate}</TableRowColumn>
-			<TableRowColumn>{(amount).toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{withdrawFee}</TableRowColumn>
-			<TableRowColumn>{afterWithdrawAmount.toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{(marketPrice.priceBtc * afterWithdrawAmount).toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{(marketPrice.priceUsd * afterWithdrawAmount).toFixed(2)}</TableRowColumn>
-		</TableRow>
-	)
+	const Column = x => <TableRowColumn key={uuid.v4()}>{x}</TableRowColumn>
+	const Row = x => <TableRow style={getRowStyle(name === bestOption)}>{x}</TableRow>
+	const renderItem = compose(Row, map(Column))
+
+	return renderItem(columns)
 }
 
 const mapStateToProps = state => ({
-	currencies: state.currencies,
 	uah: state.uah,
 	bestOption: state.bestOption,
 })
 
 Item.propTypes = {
-	currencyName: PropTypes.string,
-	rate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	withdrawFee: PropTypes.number,
-	priceBtc: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	priceUsd: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	name: PropTypes.string.isRequired,
+	rate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+	withdrawFee: PropTypes.number.isRequired,
+	marketPrice: PropTypes.object.isRequired,
 	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 	bestOption: PropTypes.string.isRequired,
 }
