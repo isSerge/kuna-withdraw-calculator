@@ -29,3 +29,5 @@ export const getBestOption = (currencies, uah) => {
 		R.map(transformation)
 	)(currencies)
 }
+
+export const formatNumber = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')

@@ -6,7 +6,7 @@ import {
 	TableRow,
 	TableRowColumn,
 } from 'material-ui/Table'
-import { getRowStyle } from '../utils'
+import { getRowStyle, formatNumber } from '../utils'
 import { map, compose } from 'ramda'
 
 const Item = ({
@@ -29,7 +29,7 @@ const Item = ({
 		(marketPrice.priceUsd * afterWithdrawAmount).toFixed(2),
 	]
 
-	const Column = x => <TableRowColumn key={uuid.v4()}>{x}</TableRowColumn>
+	const Column = x => <TableRowColumn key={uuid.v4()}>{formatNumber(x)}</TableRowColumn>
 	const Row = x => <TableRow style={getRowStyle(name === bestOption)}>{x}</TableRow>
 	const renderItem = compose(Row, map(Column))
 
