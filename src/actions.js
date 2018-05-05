@@ -7,6 +7,7 @@ import {
 	FETCH_KUNA_UPDATE,
 	FETCH_MARKET_UPDATE,
 	CHANGE_UAH_VALUE,
+	UPDATE_BEST_OPTION,
 } from './constants'
 
 const requestCurrencies = () => ({
@@ -37,6 +38,10 @@ const fetchMarketFailure = error => ({
 	error,
 })
 
+const updateBestOption = () => ({
+	type: UPDATE_BEST_OPTION
+})
+
 export const fethCurrencies = currencies => async(dispatch) => {
 	dispatch(requestCurrencies())
 
@@ -63,11 +68,11 @@ export const fethCurrencies = currencies => async(dispatch) => {
 		))
 	
 	dispatch(updateMarket(market))
-
-	return dispatch(updateCurrencies())
+	dispatch(updateCurrencies())
+	return dispatch(updateBestOption())
 }
 
-export const updateUah = value => ({
-	type: CHANGE_UAH_VALUE,
-	value
-})
+export const updateUah = value => dispatch => {
+	dispatch({ type: CHANGE_UAH_VALUE, value})
+	return dispatch(updateBestOption())
+}

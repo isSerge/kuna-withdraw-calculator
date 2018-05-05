@@ -17,35 +17,14 @@ const Row = c => <TableRow>{c}</TableRow>
 const HeaderColumn = t => <TableHeaderColumn style={{ whiteSpace: 'pre-wrap' }} key={t}>{t}</TableHeaderColumn>
 const renderHeader = compose(Header, Row, map(HeaderColumn))
 
-const Currencies = ({ currencies, uah, bestOption }) => {
+const renderItem = x => <Item key={uuid.v4()} {...x}/>
+const Body = c => <TableBody>{c}</TableBody>
+const renderBody = compose(Body, map(renderItem))
 
-	const renderItem = x => (
-		<Item
-			key={uuid.v4()}
-			currencyName={x.name}
-			rate={x.rate}
-			amount={uah / x.rate}
-			withdrawFee={x.withdrawFee}
-			priceBtc={x.marketPrice.priceBtc}
-			priceUsd={x.marketPrice.priceUsd}
-			isBestOption={x.name === bestOption}
-		/>
-	)
-	const Body = c => <TableBody>{c}</TableBody>
-	const renderBody = compose(Body, map(renderItem))
-
-	return (
-		<Table>
-			{renderHeader(columnNames)}
-			{renderBody(currencies)}
-		</Table>
-	)
-}
+const Currencies = ({ currencies }) =><Table>{renderHeader(columnNames)}{renderBody(currencies)}</Table>
 
 Currencies.propTypes = {
 	currencies: PropTypes.array.isRequired,
-	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-	bestOption: PropTypes.string.isRequired,
 }
 
 export default Currencies

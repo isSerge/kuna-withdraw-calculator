@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import {
 	TableRow,
 	TableRowColumn,
@@ -7,38 +8,43 @@ import {
 import { getRowStyle } from '../utils'
 
 const Item = ({
-	currencyName,
+	name,
 	rate,
-	amount,
 	withdrawFee,
-	priceBtc,
-	priceUsd,
-	isBestOption,
+	marketPrice,
+	uah,
+	bestOption, 
 }) => {
+	const amount = uah / rate
 	const afterWithdrawAmount = amount - withdrawFee
 
 	return (
-		<TableRow style={getRowStyle(isBestOption)}>
-			<TableRowColumn>{currencyName}</TableRowColumn>
+		<TableRow style={getRowStyle(name === bestOption)}>
+			<TableRowColumn>{name}</TableRowColumn>
 			<TableRowColumn>{rate}</TableRowColumn>
-			<TableRowColumn>{amount.toFixed(5)}</TableRowColumn>
+			<TableRowColumn>{(amount).toFixed(5)}</TableRowColumn>
 			<TableRowColumn>{withdrawFee}</TableRowColumn>
 			<TableRowColumn>{afterWithdrawAmount.toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{(priceBtc * afterWithdrawAmount).toFixed(5)}</TableRowColumn>
-			<TableRowColumn>{(priceUsd * afterWithdrawAmount).toFixed(2)}</TableRowColumn>
+			<TableRowColumn>{(marketPrice.priceBtc * afterWithdrawAmount).toFixed(5)}</TableRowColumn>
+			<TableRowColumn>{(marketPrice.priceUsd * afterWithdrawAmount).toFixed(2)}</TableRowColumn>
 		</TableRow>
 	)
 }
 
+const mapStateToProps = state => ({
+	currencies: state.currencies,
+	uah: state.uah,
+	bestOption: state.bestOption,
+})
+
 Item.propTypes = {
 	currencyName: PropTypes.string,
 	rate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	withdrawFee: PropTypes.number,
 	priceBtc: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	priceUsd: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	isBestOption: PropTypes.bool,
+	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+	bestOption: PropTypes.string.isRequired,
 }
 
-export default Item
+export default connect(mapStateToProps)(Item)

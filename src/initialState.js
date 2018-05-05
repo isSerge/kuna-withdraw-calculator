@@ -92,4 +92,5 @@ export default {
 	isFetching: false,
 	error: '',
 	uah: 1000,
+	bestOption: '',
 }

@@ -7,9 +7,8 @@ import TextField from 'material-ui/TextField'
 import './App.css'
 import Currencies from './Currencies'
 import { fethCurrencies, updateUah } from '../actions'
-import { getBestOption } from '../utils'
 
-const App = ({ currencies, uah, bestOption, updateUah }) => (
+const App = ({ currencies, updateUah, uah }) => (
 	<div className="App">
 		<TextField
 			value={uah}
@@ -17,16 +16,14 @@ const App = ({ currencies, uah, bestOption, updateUah }) => (
 			floatingLabelText="Enter amount of UAH"
 			floatingLabelFixed
 		/>
-		<Currencies currencies={currencies} uah={uah} bestOption={bestOption} />
+		<Currencies currencies={currencies} />
 	</div>
 )
 
 export const AppWithData = lifecycle({
 	async componentDidMount() {
 		const { fethCurrencies, currencies } = this.props
-
 		await fethCurrencies(currencies)
-
 		setInterval(async () => await fethCurrencies(currencies), 15000)
 	},
 })(App)
@@ -34,7 +31,6 @@ export const AppWithData = lifecycle({
 const mapStateToProps = state => ({
 	currencies: state.currencies,
 	uah: state.uah,
-	bestOption: getBestOption(state.currencies, state.uah),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -44,8 +40,6 @@ const mapDispatchToProps = dispatch => ({
 
 App.propTypes = {
 	currencies: PropTypes.array.isRequired,
-	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-	bestOption: PropTypes.string.isRequired,
 	fethCurrencies: PropTypes.func.isRequired,
 	updateUah: PropTypes.func.isRequired,
 }
