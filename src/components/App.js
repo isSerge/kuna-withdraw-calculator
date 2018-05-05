@@ -15,6 +15,7 @@ const App = ({ currencies, updateUah, uah }) => (
 			onChange={e => updateUah(e.target.value)}
 			floatingLabelText="Enter amount of UAH"
 			floatingLabelFixed
+			type="number"
 		/>
 		<Currencies currencies={currencies} />
 	</div>
