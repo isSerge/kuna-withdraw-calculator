@@ -4,10 +4,9 @@ import {
 	UPDATE_BEST_OPTION,
 	FETCH_CURRENCIES_REQUEST,
 	FETCH_CURRENCIES_SUCCESS,
+	FETCH_CURRENCIES_FAILURE,
 	FETCH_KUNA_UPDATE,
-	FETCH_KUNA_FAILURE,
 	FETCH_MARKET_UPDATE,
-	FETCH_MARKET_FAILURE,
 } from './constants'
 import initialState from './initialState'
 import { getBestOption } from './utils'
@@ -30,14 +29,11 @@ const actionHandlers = {
 		...state,
 		currencies: state.currencies.map((x, i) => ({...x, rate: action.rates[i]})),
 	}),
-	// todo: make individual error and global isFetching
-	[FETCH_KUNA_FAILURE]:(state, action) => ({ ...state, error: action.error, isFetching: false }),
 	[FETCH_MARKET_UPDATE]:(state, action) => ({
 		...state,
 		currencies: state.currencies.map((x, i) => ({...x, marketPrice: action.prices[i]})),
 	}),
-	// todo: make individual error and global isFetching
-	[FETCH_MARKET_FAILURE]:(state, action) => ({ ...state, error: action.error, isFetching: false }),
+	[FETCH_CURRENCIES_FAILURE]:(state, action) => ({ ...state, error: action.error, isFetching: false }),
 }
 
 export default createReducer(initialState, actionHandlers)

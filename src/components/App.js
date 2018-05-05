@@ -8,8 +8,9 @@ import './App.css'
 import Currencies from './Currencies'
 import { fethCurrencies, updateUah } from '../actions'
 
-const App = ({ currencies, updateUah, uah }) => (
+const App = ({ currencies, updateUah, uah, error }) => (
 	<div className="App">
+		<div>{error}</div>
 		<TextField
 			value={uah}
 			onChange={e => updateUah(e.target.value)}
@@ -32,6 +33,7 @@ export const AppWithData = lifecycle({
 const mapStateToProps = state => ({
 	currencies: state.currencies,
 	uah: state.uah,
+	error: state.error,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -41,6 +43,8 @@ const mapDispatchToProps = dispatch => ({
 
 App.propTypes = {
 	currencies: PropTypes.array.isRequired,
+	error: PropTypes.string.isRequired,
+	uah: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 	fethCurrencies: PropTypes.func.isRequired,
 	updateUah: PropTypes.func.isRequired,
 }

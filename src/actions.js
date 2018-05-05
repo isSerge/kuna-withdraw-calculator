@@ -2,8 +2,7 @@ import axios from 'axios'
 import {
 	FETCH_CURRENCIES_REQUEST,
 	FETCH_CURRENCIES_SUCCESS,
-	FETCH_KUNA_FAILURE,
-	FETCH_MARKET_FAILURE,
+	FETCH_CURRENCIES_FAILURE,
 	FETCH_KUNA_UPDATE,
 	FETCH_MARKET_UPDATE,
 	CHANGE_UAH_VALUE,
@@ -18,23 +17,18 @@ const updateCurrencies = () => ({
 	type: FETCH_CURRENCIES_SUCCESS,
 })
 
-const updateKuna = rates => ({
+const updateRates = rates => ({
 	type: FETCH_KUNA_UPDATE,
 	rates
 })
 
-const updateMarket = prices => ({
+const updatePrices = prices => ({
 	type: FETCH_MARKET_UPDATE,
 	prices,
 })
 
-const fetchKunaFailure = error => ({
-	type: FETCH_KUNA_FAILURE,
-	error,
-})
-
-const fetchMarketFailure = error => ({
-	type: FETCH_MARKET_FAILURE,
+const fetchFailure = error => ({
+	type: FETCH_CURRENCIES_FAILURE,
 	error,
 })
 
@@ -48,31 +42,31 @@ export const fethCurrencies = currencies => async(dispatch) => {
 	const kunaUrl = 'https://kuna.io/api/v2/tickers'
 	const marketUrl = 'https://api.coinmarketcap.com/v1/ticker'
 
-	const kuna = await Promise.all(currencies.map(x =>
+	const rates = await Promise.all(currencies.map(x =>
 		axios
 			.get(`${kunaUrl}/${x.kunaName}uah/`)
 			.then(r => r.data.ticker.last)
-			.catch(e => dispatch(fetchKunaFailure(e)))
+			.catch(() => dispatch(fetchFailure('Something went wrong')))
 		))
 
-	dispatch(updateKuna(kuna))
+	dispatch(updateRates(rates))
 
-	const market = await Promise.all(currencies.map(x =>
+	const prices = await Promise.all(currencies.map(x =>
 		axios
 			.get(`${marketUrl}/${x.cmc}/`)
 			.then(r => ({
 				priceBtc: r.data[0].price_btc,
 				priceUsd: r.data[0].price_usd,
 			}))
-			.catch(e => dispatch(fetchMarketFailure(e)))
+			.catch(() => dispatch(fetchFailure('Something went wrong')))
 		))
 	
-	dispatch(updateMarket(market))
+	dispatch(updatePrices(prices))
 	dispatch(updateCurrencies())
-	return dispatch(updateBestOption())
+	dispatch(updateBestOption())
 }
 
 export const updateUah = value => dispatch => {
 	dispatch({ type: CHANGE_UAH_VALUE, value})
-	return dispatch(updateBestOption())
+	dispatch(updateBestOption())
 }
